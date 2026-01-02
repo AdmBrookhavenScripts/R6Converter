@@ -48,7 +48,10 @@ if hrpNew and hrpOld then
 	newChar:SetPrimaryPartCFrame(hrpOld.CFrame)
 end
 
-char:Destroy()
+local oldHrp = char:FindFirstChild("HumanoidRootPart")
+if oldHrp then
+	oldHrp.CFrame = CFrame.new(0, 1e30, 0)
+end
 plr.Character = newChar
 
 local cam = workspace.CurrentCamera
@@ -606,42 +609,7 @@ TextChatService.OnIncomingMessage = function(message)
 	end
 	local text = message.Text:lower()
 	if text == "r6" then
-	spawn(oof)
-task.wait(0.5)
-task.spawn(function()
-local p=game:GetService("Players").LocalPlayer
-local r15=workspace:FindFirstChild(p.Name)
-if not r15 then return end
-
-local r6
-for _,m in ipairs(workspace:GetChildren()) do
-	if m:IsA("Model") and m.Name==p.Name and m~=r15 then
-		r6=m
-		break
-	end
-end
-if not r6 then return end
-local s=r15:FindFirstChildOfClass("Shirt")
-if s then s:Clone().Parent=r6 end
-
-local pa=r15:FindFirstChildOfClass("Pants")
-if pa then pa:Clone().Parent=r6 end
-
-local bc=r15:FindFirstChildOfClass("BodyColors")
-if bc then bc:Clone().Parent=r6 end
-
-local h15 = r15:FindFirstChild("Head")
-local h6  = r6:FindFirstChild("Head")
-
-if h15 and h6 then
-	local face = h15:FindFirstChild("face")
-	if face and face:IsA("Decal") then
-		local old = h6:FindFirstChild("face")
-		if old then old:Destroy() end
-		face:Clone().Parent = h6
-	end
-end
-end)
+	oof()
 	elseif text == "respawn" then
 		local player = game:GetService("Players").LocalPlayer
 local name = player.Name
