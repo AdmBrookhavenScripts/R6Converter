@@ -1,6 +1,17 @@
-local TextChatService = game:GetService("TextChatService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
+local Tp = false
+local oldHrp
+
+task.spawn(function()
+	while true do
+		if Tp and oldHrp then
+			oldHrp.CFrame = CFrame.new(0, 1e30, 0)
+		end
+		task.wait()
+	end
+end)
+
 function oof()
     local player = game:GetService("Players").LocalPlayer
     local char = player.Character
@@ -48,9 +59,11 @@ if hrpNew and hrpOld then
 	newChar:SetPrimaryPartCFrame(hrpOld.CFrame)
 end
 
-local oldHrp = char:FindFirstChild("HumanoidRootPart")
+if not char then return end
+
+oldHrp = char:FindFirstChild("HumanoidRootPart")
 if oldHrp then
-	oldHrp.CFrame = CFrame.new(0, 1e30, 0)
+	Tp = true
 end
 plr.Character = newChar
 
@@ -601,19 +614,72 @@ Figure:WaitForChild("Humanoid")
 return
 end
 end
-TextChatService.MessageReceived:Connect(function(message)
-	if not message.TextSource then return end
 
-	local plr = Players:GetPlayerByUserId(message.TextSource.UserId)
-	if plr ~= player then return end
+--[=[
+ d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
+88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
+88      88    88    88            odD'      88      88    88 88ooo88 
+88  ooo 88    88    88          .88'        88      88    88 88~~~88 
+88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
+ Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
 
-	local text = message.Text:lower()
+designed using localmaze gui creator
+]=]
 
-	if text == "r6" then
-		oof()
+local LMG2L = {};
 
-	elseif text == "respawn" then
-		local name = player.Name
+LMG2L["ScreenGui_1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
+LMG2L["ScreenGui_1"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+LMG2L["ScreenGui_1"].ResetOnSpawn = false
+
+
+LMG2L["TextButton_2"] = Instance.new("TextButton", LMG2L["ScreenGui_1"]);
+LMG2L["TextButton_2"]["BorderSizePixel"] = 0;
+LMG2L["TextButton_2"]["TextSize"] = 12;
+LMG2L["TextButton_2"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+LMG2L["TextButton_2"]["BackgroundColor3"] = Color3.fromRGB(37, 37, 37);
+LMG2L["TextButton_2"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
+LMG2L["TextButton_2"]["BackgroundTransparency"] = 0.5;
+LMG2L["TextButton_2"]["Size"] = UDim2.new(0, 62, 0, 14);
+LMG2L["TextButton_2"]["Text"] = [[R6]];
+LMG2L["TextButton_2"]["Position"] = UDim2.new(0, 556, 0, -52);
+
+
+LMG2L["UICorner_3"] = Instance.new("UICorner", LMG2L["TextButton_2"]);
+
+
+
+LMG2L["UIStroke_4"] = Instance.new("UIStroke", LMG2L["TextButton_2"]);
+LMG2L["UIStroke_4"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+LMG2L["UIStroke_4"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+
+LMG2L["TextButton_5"] = Instance.new("TextButton", LMG2L["ScreenGui_1"]);
+LMG2L["TextButton_5"]["BorderSizePixel"] = 0;
+LMG2L["TextButton_5"]["TextSize"] = 12;
+LMG2L["TextButton_5"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+LMG2L["TextButton_5"]["BackgroundColor3"] = Color3.fromRGB(37, 37, 37);
+LMG2L["TextButton_5"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
+LMG2L["TextButton_5"]["BackgroundTransparency"] = 0.5;
+LMG2L["TextButton_5"]["Size"] = UDim2.new(0, 62, 0, 14);
+LMG2L["TextButton_5"]["Text"] = [[Respawn]];
+LMG2L["TextButton_5"]["Position"] = UDim2.new(0, 622, 0, -52);
+
+
+LMG2L["UICorner_6"] = Instance.new("UICorner", LMG2L["TextButton_5"]);
+
+
+
+LMG2L["UIStroke_7"] = Instance.new("UIStroke", LMG2L["TextButton_5"]);
+LMG2L["UIStroke_7"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+LMG2L["UIStroke_7"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+LMG2L["TextButton_2"].MouseButton1Click:Connect(function()
+	oof()
+end)
+
+LMG2L["TextButton_5"].MouseButton1Click:Connect(function()
+   local name = player.Name
 		local keptModel
 
 		for _, m in ipairs(workspace:GetChildren()) do
@@ -630,8 +696,10 @@ TextChatService.MessageReceived:Connect(function(message)
 		end
 
 		if keptModel then
-			keptModel:BreakJoints()
-			print("respawned")
-		end
-	end
+		Tp = false
+		keptModel:FindFirstChildOfClass("Humanoid").Health = 0
+	    print("respawned")
+   end
 end)
+
+return LMG2L["ScreenGui_1"], require;
