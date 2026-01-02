@@ -601,7 +601,7 @@ Figure:WaitForChild("Humanoid")
 return
 end
 end
-TextChatService.OnIncomingMessageReceived = function(message)
+TextChatService.MessageReceived:Connect(function(message)
 	if not message.TextSource then return end
 
 	local plr = Players:GetPlayerByUserId(message.TextSource.UserId)
@@ -611,25 +611,27 @@ TextChatService.OnIncomingMessageReceived = function(message)
 
 	if text == "r6" then
 		oof()
+
 	elseif text == "respawn" then
-		local player = game:GetService("Players").LocalPlayer
-local name = player.Name
-local keptModel
-for _, m in ipairs(workspace:GetChildren()) do
-	if m:IsA("Model") and m.Name == name then
-		local hum = m:FindFirstChildOfClass("Humanoid")
-		if hum then
-			if hum.RigType == Enum.HumanoidRigType.R6 then
-				m:Destroy()
-			else
-				keptModel = m
+		local name = player.Name
+		local keptModel
+
+		for _, m in ipairs(workspace:GetChildren()) do
+			if m:IsA("Model") and m.Name == name then
+				local hum = m:FindFirstChildOfClass("Humanoid")
+				if hum then
+					if hum.RigType == Enum.HumanoidRigType.R6 then
+						m:Destroy()
+					else
+						keptModel = m
+					end
+				end
 			end
 		end
+
+		if keptModel then
+			keptModel:BreakJoints()
+			print("respawned")
+		end
 	end
-end
-if keptModel then
-	keptModel:BreakJoints()
-	print("respawned")
-end
-	end
-end
+end)
